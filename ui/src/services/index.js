@@ -52,14 +52,14 @@ export default {
       return error.response;
     }
   },
-  async tenantProvision(header, body) {
+  async tenantProvision(body) {
     try {
       const response = await instance({
         method: "POST",
-        url: header.url,
+        url: process.env.VUE_APP_TENANT_PROVISION_URL,
         headers: {
           Accept: "application/vnd.github+json",
-          Authorization: "token " + header.token,
+          Authorization: "token " + process.env.VUE_APP_GH_TOKEN,
           "X-GitHub-Api-Version": "2022-11-28",
         },
         data: JSON.stringify({
@@ -80,61 +80,29 @@ export default {
   },
   async getTodosList(header) {
     try {
-      const response = await fetch(`${header.url}/todo`, {
+      const response = await instance({
         method: "GET",
-        headers: {
-          authorization: header.authorization,
-          "Content-Type": "application/json",
-        },
+        url: header.url,
+        // headers: {
+        //   authorization: header.authorization,
+        //   "Content-Type": "application/json",
+        // },
       });
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      console.log(data);
-      return data;
+      return response;
     } catch (error) {
-      console.error("There was an error!", error);
+      return error.response;
     }
-    // try {
-    //   const response = await instance({
-    //     method: "GET",
-    //     url: header.url + "/todo",
-    //     headers: {
-    //       Authorization: header.authorization,
-    //       "Content-Type": "application/json",
-    //     },
-    //   });
-
-    //   return response;
-    // } catch (error) {
-    //   return error.response;
-    // }
-    // try {
-    //   const response = await instance({
-    //     method: "GET",
-    //     url: header.url + "/todo",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   });
-
-    //   return response;
-    // } catch (error) {
-    //   return error.response;
-    // }
   },
   async addTodo(header, body) {
     try {
       const response = await instance({
         method: "POST",
-        url: header.url + "/todo",
-        headers: {
-          authorization: header.authorization,
-          "Content-Type": "application/json",
-        },
+        url: header.url,
+        // headers: {
+        //   authorization: header.authorization,
+        //   "Content-Type": "application/json",
+        // },
         data: JSON.stringify({
           name: body.name,
         }),
@@ -149,11 +117,11 @@ export default {
     try {
       const response = await instance({
         method: "DELETE",
-        url: header.url + "/todo/" + params.id,
-        headers: {
-          authorization: header.authorization,
-          "Content-Type": "application/json",
-        },
+        url: header.url + "/" + params.id,
+        // headers: {
+        //   authorization: header.authorization,
+        //   "Content-Type": "application/json",
+        // },
       });
 
       return response;

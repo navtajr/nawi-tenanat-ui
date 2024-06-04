@@ -1,10 +1,18 @@
-import Vue from 'vue'
-import App from './App.vue'
-import router from './router'
+import { createApp } from "vue";
+import App from "./App.vue";
+import router from "./router";
+import store from "./store";
+import "./assets/css/tailwind.css";
 
-Vue.config.productionTip = false
+// import axios from "axios";
 
-new Vue({
-    router,
-    render: h => h(App),
-}).$mount('#app')
+// axios.defaults.withCredentials = true;
+// // axios.defaults.baseURL = process.env.BASE_URL;
+// axios.defaults.baseURL = "http://localhost:3003";
+
+const app = createApp(App);
+const config = window.config || {};
+console.log("config", config);
+app.config.globalProperties.$userApiService = config.VUE_APP_USER_API_URL;
+
+app.use(store).use(router).mount("#app");
