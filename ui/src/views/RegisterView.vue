@@ -166,7 +166,7 @@ export default {
         service
           .register(
             {
-              url: this.$userApiService,
+              url: this.$envVariables.VUE_APP_USER_API_URL,
             },
             {
               username: this.username.toLowerCase(),
@@ -176,16 +176,22 @@ export default {
           .then((response) => {
             const status = response.status;
             console.log("Status", status);
-            const { message, error, id } = response.data;
-
+            const { message, error, id, success } = response.data;
+            console.log("Success", success);
             if (status == 200) {
               service
-                .tenantProvision({
-                  username: this.username.toLowerCase() + "-" + id,
-                  password: this.password,
-                  appName: "tenant-" + id + "-todo-app",
-                  appNamespace: "tenant-" + id,
-                })
+                .tenantProvision(
+                  {
+                    url: this.$envVariables.VUE_APP_TENANT_PROVISION_URL,
+                    token: this.$envVariables.VUE_APP_GH_TOKEN,
+                  },
+                  {
+                    username: this.username.toLowerCase() + "-" + id,
+                    password: this.password,
+                    appName: "tenant-" + id + "-todo-app",
+                    appNamespace: "tenant-" + id,
+                  }
+                )
                 .then((response) => {
                   console.log("Tenant Provision", response);
                 })
